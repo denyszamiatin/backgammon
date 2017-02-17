@@ -8,3 +8,4 @@ def print_score():
 
 print_score()
 print_score()
+print_score()
