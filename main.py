@@ -24,6 +24,16 @@ def input_player_name(number):
     return input("What is the " + number + " player name?\n")
 
 
+def check_players():
+    while True:
+        if players[1] == players[0]:
+            print('name already exist')
+            players[1] = input_player_name('second')
+        else:
+            print(players[get_first_turn()])
+            break
+
+
 def init_board(board):
     board[BOARD_SIZE - 1] = str(CHECKERS_QTY) + WHITE_CHECKER
     board[HALF_BOARD - 1] = str(CHECKERS_QTY) + BLACK_CHECKER
@@ -64,6 +74,7 @@ board = create_board()
 init_board(board)
 
 players = [input_player_name('first'), input_player_name('second')]
+check_players()
 
 print_board(board)
 
