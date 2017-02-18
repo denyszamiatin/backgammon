@@ -44,7 +44,7 @@ def print_board(board):
 
     for index in range(HALF_BOARD, 0, -1):
         print('{0:3d}'.format(index), end=''),
-
+    print('\n')
 
 def get_first_turn():
     while True:
@@ -58,12 +58,30 @@ def get_first_turn():
         return 1
 
 
-print_score()
-print_score()
+#print_score()
+#print_score()
 board = create_board()
 init_board(board)
 
 players = [input_player_name('first'), input_player_name('second')]
 
-print(players[get_first_turn()])
 print_board(board)
+
+
+def get_dice_result():
+
+    dice_results = []
+    roll = 0
+    NUMBER_OF_ROLLS = 2
+
+    while roll < NUMBER_OF_ROLLS:
+        dice_results.append(get_score())
+        roll += 1
+
+    if dice_results[0] == dice_results[1]:
+        dice_results = dice_results * 2
+
+    return dice_results
+
+print(players[get_first_turn()])
+print(get_dice_result())
