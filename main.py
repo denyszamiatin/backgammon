@@ -6,7 +6,8 @@ HALF_BOARD = 12
 CHECKERS_QTY = 15
 WHITE_CHECKER = 'w'
 BLACK_CHECKER = 'b'
-
+global white_on_board
+global black_on_board
 
 def get_score():
     return random.randint(1, 6)
@@ -166,9 +167,11 @@ def get_dice_result():
     return dice_results
 
 print("First turn", players[get_first_turn()])
-print(get_dice_result())
+#print(get_dice_result())
 
 def get_checkers_position():
+    global white_on_board
+    global black_on_board
     black_on_board = []
     white_on_board = []
     while True:
@@ -180,4 +183,43 @@ def get_checkers_position():
 
         return black_on_board,white_on_board
 
-print(get_checkers_position())
+#print(get_checkers_position())
+
+def check_move_possibility_white():
+    move_is_possible = 0
+    get_checkers_position()
+    dice_result = get_dice_result()
+    qty_of_steps = len(dice_result)
+    while qty_of_steps>0:
+        for i in dice_result:
+            for j in white_on_board:
+                for b in black_on_board:
+                    if j-i != b:
+                        print("White checker can be moved to position", j-i)
+                        qty_of_steps=-1
+                        move_is_possible = 1
+                    else:
+                        print("White checker can't be moved to position ",b, "because here is black checker")
+    if move_is_possible == 1:
+        return 0
+
+def check_move_possibility_black():
+    move_is_possible = 0
+    get_checkers_position()
+    dice_result = get_dice_result()
+    qty_of_steps = len(dice_result)
+    while qty_of_steps>0:
+        for i in dice_result:
+            for j in black_on_board:
+                for w in white_on_board:
+                    if j-i != w:
+                        print("Black checker can be moved to position", j-i)
+                        qty_of_steps=-1
+                        move_is_possible = 1
+                    else:
+                        print("Black checker can't be moved to position ",w, "because here is white checker")
+    if move_is_possible == 1:
+        return 0
+
+print(check_move_possibility_white())
+print(check_move_possibility_black())
