@@ -165,5 +165,19 @@ def get_dice_result():
 
     return dice_results
 
-print(players[get_first_turn()])
+print("First turn", players[get_first_turn()])
 print(get_dice_result())
+
+def get_checkers_position():
+    black_on_board = []
+    white_on_board = []
+    while True:
+        for index,qty,color in alt_board:
+            if color == 'b':
+                black_on_board.append(index)
+            elif color == 'w':
+                white_on_board.append(index)
+
+        return black_on_board,white_on_board
+
+print(get_checkers_position())
