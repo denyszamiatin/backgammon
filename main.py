@@ -72,54 +72,38 @@ def init_alt_board(alt_board):
     alt_board[12][1] = CHECKERS_QTY
     alt_board[12][2] = BLACK_CHECKER
 
-def print_alt_first_half_board(alt_board):
+def print_alt_board(alt_board):
 
     """
-    Visualize first half of the board
+    Visualize the board
     """
 
-    i = HALF_BOARD
-
-    while i < BOARD_SIZE:
+    for i in range(HALF_BOARD, BOARD_SIZE):
         print('{0:4d}'.format(alt_board[::-1][i][0]), end=" ")
-        i += 1
-    print('\n')
 
-    i = HALF_BOARD   # It is unclear why we should initialize i again
+    print('\n')
     print(" ", end= " ")
 
-    while i < BOARD_SIZE:
+    for i in range(HALF_BOARD, BOARD_SIZE):
         if alt_board[::-1][i][1] != " ":
             print('{0:4s}'.format(str(alt_board[::-1][i][1]) + alt_board[::-1][i][2]), end=" ")
         else:
             print('{0:4s}'.format('_'), end=' ')
-        i += 1
+
 
     print("\n\n\n")
-
-def print_alt_second_half_board(alt_board):
-    """
-    Visualize second half of the board
-    """
-
-    i = HALF_BOARD
-
     print(" ", end= " ")
-    while i < BOARD_SIZE:
+
+    for i in range(HALF_BOARD, BOARD_SIZE):
         if alt_board[i][1] != " ":
             print('{0:4s}'.format(str(alt_board[i][1]) + alt_board[i][2]), end=" ")
-
         else:
             print('{0:4s}'.format('_'), end=' ')
-        i += 1
 
     print('\n')
 
-    i = HALF_BOARD # ????
-
-    while i < BOARD_SIZE:
+    for i in range(HALF_BOARD, BOARD_SIZE):
         print('{0:4d}'.format(alt_board[i][0]), end=" ")
-        i += 1
     print('\n')
 
 
@@ -142,8 +126,7 @@ def get_first_turn():
 
 alt_board = create_alt_board()
 init_alt_board(alt_board)
-print_alt_first_half_board(alt_board)
-print_alt_second_half_board(alt_board)
+print_alt_board(alt_board)
 
 players = [input_player_name('first'), input_player_name('second')]
 check_players()
