@@ -3,11 +3,14 @@ import random
 
 BOARD_SIZE = 24
 HALF_BOARD = 12
+BOARD_START = 0
 CHECKERS_QTY = 15
-WHITE_CHECKER = 'w'
-BLACK_CHECKER = 'b'
-global white_on_board
-global black_on_board
+WHITE = 'w'
+BLACK = 'b'
+CELL_NUMBER = 0
+QTY = 1
+COLOR = 2
+
 
 def get_score():
     return random.randint(1, 6)
@@ -21,216 +24,129 @@ def input_player_name(number):
     return input("What is the " + number + " player name?\n")
 
 
-def check_players():
+def input_second_player_name(player1_name):
     while True:
-        if players[1] == players[0]:
-            print('name already exist')
-            players[1] = input_player_name('second')
-        else:
-            print(players[get_first_turn()])
-            break
-"""
+        player2_name = input_player_name('second')
+        if player1_name != player2_name:
+            return player2_name
+
+
 def create_board():
-    return [" _ "] * BOARD_SIZE
+    return [[i, 0, " "] for i in range(BOARD_SIZE, 0, -1)]
 
 
 def init_board(board):
-    board[BOARD_SIZE - 1] = str(CHECKERS_QTY) + WHITE_CHECKER
-    board[HALF_BOARD - 1] = str(CHECKERS_QTY) + BLACK_CHECKER
+    board[BOARD_START][QTY] = CHECKERS_QTY
+    board[BOARD_START][COLOR] = WHITE
+    board[HALF_BOARD][QTY] = CHECKERS_QTY
+    board[HALF_BOARD][COLOR] = BLACK
+
+
+def print_half_board(board):
+    for cell in board[HALF_BOARD:BOARD_SIZE]:
+        if cell[QTY] != 0:
+            print(
+                '{0:4s}'.format(str(cell[QTY]) + cell[COLOR]),
+                end=" "
+            )
+        else:
+            print('{0:4s}'.format('_'), end=' ')
+
+
+def print_board_numbers(board):
+    for cell in board[HALF_BOARD:BOARD_SIZE]:
+        print('{0:4d}'.format(cell[CELL_NUMBER]), end=" ")
 
 
 def print_board(board):
-    for index in range(HALF_BOARD + 1, BOARD_SIZE + 1):
-        print('{0:3d}'.format(index), end='')
-    print('')
-
-    for element in board[HALF_BOARD:]:
-        print('{0:3s}'.format(element), end='')
-    print('\n\n\n')
-
-    for element in board[HALF_BOARD - 1::-1]:
-        print('{0:3s}'.format(element), end='')
-    print('')
-
-    for index in range(HALF_BOARD, 0, -1):
-        print('{0:3d}'.format(index), end=''),
-    print('\n')
-"""
-
-def create_alt_board():
-
-    alt_board = [[i+1," "," "]for i in range(BOARD_SIZE)]
-    alt_board = alt_board[::-1]
-    return alt_board
-
-
-
-def init_alt_board(alt_board):
-
-    alt_board[0][1] = CHECKERS_QTY
-    alt_board[0][2] = WHITE_CHECKER
-    alt_board[12][1] = CHECKERS_QTY
-    alt_board[12][2] = BLACK_CHECKER
-
-def print_alt_first_half_board(alt_board):
-
     """
-    Visualize first half of the board
+    Visualize board
     """
-
-    i = HALF_BOARD
-
-    while i < BOARD_SIZE:
-        print('{0:4d}'.format(alt_board[::-1][i][0]), end=" ")
-        i += 1
+    print_board_numbers(board[::-1])
     print('\n')
-
-    i = HALF_BOARD   # It is unclear why we should initialize i again
-    print(" ", end= " ")
-
-    while i < BOARD_SIZE:
-        if alt_board[::-1][i][1] != " ":
-            print('{0:4s}'.format(str(alt_board[::-1][i][1]) + alt_board[::-1][i][2]), end=" ")
-        else:
-            print('{0:4s}'.format('_'), end=' ')
-        i += 1
-
+    print("  ", end="")
+    print_half_board(board[::-1])
     print("\n\n\n")
 
-def print_alt_second_half_board(alt_board):
-    """
-    Visualize second half of the board
-    """
-
-    i = HALF_BOARD
-
-    print(" ", end= " ")
-    while i < BOARD_SIZE:
-        if alt_board[i][1] != " ":
-            print('{0:4s}'.format(str(alt_board[i][1]) + alt_board[i][2]), end=" ")
-
-        else:
-            print('{0:4s}'.format('_'), end=' ')
-        i += 1
-
+    print("  ", end="")
+    print_half_board(board)
     print('\n')
-
-    i = HALF_BOARD # ????
-
-    while i < BOARD_SIZE:
-        print('{0:4d}'.format(alt_board[i][0]), end=" ")
-        i += 1
+    print_board_numbers(board)
     print('\n')
 
 
 def get_first_turn():
-    players = []
     while True:
         player_1_score = get_score()
         player_2_score = get_score()
-        if player_1_score != player_2_score:
-            break
-    if player_1_score > player_2_score:
-        return 0
-    else:
-        return 1
+        if player_1_score > player_2_score:
+            return 0
+        elif player_1_score < player_2_score:
+            return 1
 
 
-#print_score()
-#print_score()
-#board = create_board()
-#init_board(board)
+board = create_board()
+init_board(board)
+print_board(board)
 
-alt_board = create_alt_board()
-init_alt_board(alt_board)
-print_alt_first_half_board(alt_board)
-print_alt_second_half_board(alt_board)
-
-players = [input_player_name('first'), input_player_name('second')]
-check_players()
-
-#print_board(board)
+players = []
+players.append(input_player_name('first'))
+players.append(input_second_player_name(players[0]))
 
 
-def get_dice_result():
+def roll_dices():
 
-    dice_results = []
-    roll = 0
-    NUMBER_OF_ROLLS = 2
-
-    while roll < NUMBER_OF_ROLLS:
-        dice_results.append(get_score())
-        roll += 1
+    dice_results = [get_score() for _ in range(2)]
 
     if dice_results[0] == dice_results[1]:
-        dice_results = dice_results * 2
+        dice_results *= 2
 
     return dice_results
 
-dice_res = get_dice_result()
-
-# print("First turn", players[get_first_turn()])
-# print(get_dice_result())
-
-def get_checkers_position():
-    global white_on_board
-    global black_on_board
-    black_on_board = []
-    white_on_board = []
-    while True:
-        for index,qty,color in alt_board:
-            if color == 'b':
-                black_on_board.append(index)
-            elif color == 'w':
-                white_on_board.append(index)
-
-        return black_on_board,white_on_board
+dice_res = roll_dices()
 
 
-print('checkers_pos: ', get_checkers_position())
+def get_checkers_position(board, color):
+    return [index for index, cell in enumerate(board) if cell[COLOR] == color]
 
 
-def check_move_possibility_white(dice_res):
-    move_is_possible = 0
-    get_checkers_position()
-    # dice_result = get_dice_result()
-    print("dice_res: ", dice_res)
-    qty_of_steps = len(dice_res)
-    while qty_of_steps>0:
-        for i in dice_res:
-            for j in white_on_board:
-                for b in black_on_board:
-                    if j-i != b:
-                        print("White checker can be moved to position", j-i)
-                        qty_of_steps=-1
-                        move_is_possible = 1
-                    else:
-                        print("White checker can't be moved to position ",b, "because here is black checker")
-    if move_is_possible == 1:
-        return 0
+print('checkers_pos: ', get_checkers_position(board, BLACK))
+print('checkers_pos: ', get_checkers_position(board, WHITE))
 
 
-def check_move_possibility_black(dice_res):
-    move_is_possible = 0
-    get_checkers_position()
-    # dice_result = get_dice_result()
-    print("dice_res: ", dice_res)
-    qty_of_steps = len(dice_res)
-    while qty_of_steps>0:
-        for i in dice_res:
-            for j in black_on_board:
-                for w in white_on_board:
-                    if j-i != w:
-                        print("Black checker can be moved to position", j-i)
-                        qty_of_steps=-1
-                        move_is_possible = 1
-                    else:
-                        print("Black checker can't be moved to position ",w, "because here is white checker")
-    if move_is_possible == 1:
-        return 0
+def move_white(pos, dice):
+    return pos - dice
 
-# print(check_move_possibility_white())
-# print(check_move_possibility_black())
+
+def move_black(pos, dice):
+    new_pos = pos - dice
+    if new_pos <= 0:
+        new_pos += BOARD_SIZE
+    return new_pos
+
+
+def inverse_color(color):
+    if color == BLACK:
+        return WHITE
+    else:
+        return BLACK
+
+
+def check_move_possibility(dices, color):
+    print("dice_res: ", dices)
+    for dice in dices:
+        for pos in get_checkers_position(board, color):
+            if color == BLACK:
+                new_pos = move_black(pos, dice)
+            else:
+                new_pos = move_white(pos, dice)
+            if board[new_pos][COLOR] != inverse_color(color):
+                print("Checker can be moved to position",
+                      new_pos)
+            else:
+                print("Checker can't be moved to position ",
+                      new_pos,
+                      "because here is enemy's checker")
 
 
 def check_possible_turn():
@@ -241,9 +157,9 @@ def check_possible_turn():
     a list that consists of a cell number and the number of dice
     :return:
     """
-    possible_numbers = [i for i in range(1,25)]
+    possible_numbers = [i for i in range(1, BOARD_SIZE + 1)]
     res_list = []
-    print(alt_board)
+    print(board)
     first_turn = players[get_first_turn()]
     print('first turn: ', first_turn)
     number_of_field = None
@@ -251,7 +167,7 @@ def check_possible_turn():
 
     if first_turn == players[0]:
         print('Player', players[0] + ' throws the dice...')
-        check_move_possibility_white(dice_res)
+        check_move_possibility(dice_res)
 
         while True:
             try:
