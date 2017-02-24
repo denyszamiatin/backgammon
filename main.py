@@ -155,10 +155,94 @@ players.append(input_second_player_name(players[0]))
 
 current_player = players[get_first_turn()]
 
-print(current_player, " goes first")
+# print(current_player, " goes first")
+#
+# change_player()
 
-change_player()
-
-print("Now ",current_player, " goes")
+# print("Now ",current_player, " goes")
 
 dice_res = roll_dices()
+
+def enter_the_number_of_field():
+    possible_numbers = [i for i in range(1, BOARD_SIZE + 1)]
+    number_of_field = 0
+    first_turn = players[get_first_turn()]
+    print('first_turn', first_turn)
+    if first_turn == players[0]:
+        check_move_possibility(dice_res, WHITE)
+        while True:
+            try:
+                number_of_field = int(input('please, enter the number of the field from which '
+                                            'you will start the turn (1-24): '))
+                if number_of_field not in possible_numbers:
+                    raise ValueError
+                else:
+                    for cell in board:
+                        if cell[0] == number_of_field and cell[2] == BLACK:
+                            print("you can't move the checker there")
+                            break
+                    else:
+                        return number_of_field
+            except ValueError:
+                print('ValueError, try again...')
+                continue
+    else:
+        check_move_possibility(dice_res, BLACK)
+        while True:
+            try:
+                number_of_field = int(input('please, enter the number of the field from which '
+                                            'you will start the turn (1-24): '))
+                if number_of_field not in possible_numbers:
+                    raise ValueError
+                else:
+                    for cell in board:
+                        if cell[0] == number_of_field and cell[2] == WHITE:
+                            print("you can't move the checker there")
+                            break
+                    else:
+                        return number_of_field
+            except ValueError:
+                print('ValueError, try again...')
+                continue
+
+
+def enter_the_number_of_dice(dices):
+    dices = dice_res
+    number_of_dice = 0
+    while True:
+        try:
+            number_of_dice = int(input('please, enter the number to which you want '
+                                       'to move the check (1,6): '))
+            if number_of_dice not in dices:
+                raise ValueError
+            else:
+                return number_of_dice
+        except ValueError:
+            print('ValueError, try again...')
+            continue
+
+
+field_and_number = []
+field_and_number = [enter_the_number_of_field(), enter_the_number_of_dice(dice_res)]
+print(field_and_number)
+
+
+def check_checkers_in_house(board, color):
+    sum_ = 0
+    for cell in board:
+        if cell[2] == color:
+            for index, argument_of_cell in enumerate(cell):
+                if index == 1:
+                    sum_ += argument_of_cell
+    if sum_ ==  CHECKERS_QTY:
+        print('all checkers are in house')
+        return True
+    else:
+        print('continue')
+        return False
+
+
+WHITE_CHECKERS_HOUSE = board[18:]
+BLACK_CHECKERS_HOUSE = board[6:12]
+check_checkers_in_house(WHITE_CHECKERS_HOUSE, BLACK)
+check_checkers_in_house(BLACK_CHECKERS_HOUSE, WHITE)
