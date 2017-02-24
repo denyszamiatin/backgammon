@@ -85,15 +85,6 @@ def get_first_turn():
             return 1
 
 
-board = create_board()
-init_board(board)
-print_board(board)
-
-players = []
-players.append(input_player_name('first'))
-players.append(input_second_player_name(players[0]))
-
-
 def roll_dices():
 
     dice_results = [get_score() for _ in range(2)]
@@ -103,15 +94,9 @@ def roll_dices():
 
     return dice_results
 
-dice_res = roll_dices()
-
 
 def get_checkers_position(board, color):
     return [index for index, cell in enumerate(board) if cell[COLOR] == color]
-
-
-print('checkers_pos: ', get_checkers_position(board, BLACK))
-print('checkers_pos: ', get_checkers_position(board, WHITE))
 
 
 def move_white(pos, dice):
@@ -131,6 +116,14 @@ def inverse_color(color):
     else:
         return BLACK
 
+def change_player():
+    global current_player
+    if current_player == players[0]:
+        current_player =  players[1]
+        return current_player
+    else:
+        current_player =  players[0]
+        return current_player
 
 def check_move_possibility(dices, color):
     print("dice_res: ", dices)
@@ -149,74 +142,23 @@ def check_move_possibility(dices, color):
                       "because here is enemy's checker")
 
 
-def check_possible_turn():
-    """
-    function determines who goes first,
-    then asks to enter the cell number from which will start the turn, and how much,
-    then check for the possibility of the implementation, if the turn is possible the function returns
-    a list that consists of a cell number and the number of dice
-    :return:
-    """
-    possible_numbers = [i for i in range(1, BOARD_SIZE + 1)]
-    res_list = []
-    print(board)
-    first_turn = players[get_first_turn()]
-    print('first turn: ', first_turn)
-    number_of_field = None
-    number_of_dice = None
+board = create_board()
+init_board(board)
+print_board(board)
 
-    if first_turn == players[0]:
-        print('Player', players[0] + ' throws the dice...')
-        check_move_possibility(dice_res)
+print('checkers_pos: ', get_checkers_position(board, BLACK))
+print('checkers_pos: ', get_checkers_position(board, WHITE))
 
-        while True:
-            try:
-                number_of_field = int(input('please, enter the number of the field from which '
-                                                'you will start the turn (1-24): '))
-                number_of_dice = int(input('please, enter the number to which you want '
-                                                       'to move the check (1,6): '))
-                if number_of_field not in possible_numbers or number_of_dice not in dice_res:
-                    raise ValueError
-                else:
-                    for cell in alt_board:
-                        if cell[0] == number_of_field and cell[2] == 'b':
-                            print("you can't move the checker there")
-                            break
-                    else:
-                        res_list.append(number_of_field)
-                        res_list.append(number_of_dice)
-                        break
-            except ValueError:
-                print('ValueError, try again...')
-                continue
+players = []
+players.append(input_player_name('first'))
+players.append(input_second_player_name(players[0]))
 
-    else:
-        print('Player', players[1] + ' throws the dice...')
-        check_move_possibility_black(dice_res)
+current_player = players[get_first_turn()]
 
-        while True:
-            try:
-                number_of_field = int(input('please, enter the number of the field from which '
-                                                'you will start the turn (1-24): '))
-                number_of_dice = int(input('please, enter the number to which you want '
-                                                       'to move the check (1,6): '))
-                if number_of_field not in possible_numbers or number_of_dice not in dice_res:
-                    raise ValueError
-                else:
-                    for cell in alt_board:
-                        if cell[0] == number_of_field and cell[2] == 'w':
-                            print("you can't move the checker there")
-                            break
-                    else:
-                        res_list.append(number_of_field)
-                        res_list.append(number_of_dice)
-                        break
-            except ValueError:
-                print('ValueError, try again...')
-                continue
+print(current_player, " goes first")
 
-    return res_list
+change_player()
 
+print("Now ",current_player, " goes")
 
-possible_move = check_possible_turn()
-print(possible_move)
+dice_res = roll_dices()
