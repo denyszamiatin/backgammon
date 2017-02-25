@@ -127,12 +127,15 @@ def change_player():
 
 def check_move_possibility(dices, color):
     print("dice_res: ", dices)
+    possible_positions = []
     for dice in dices:
         for pos in get_checkers_position(board, color):
             if color == BLACK:
                 new_pos = move_black(pos, dice)
+                possible_positions.append(new_pos)
             else:
                 new_pos = move_white(pos, dice)
+                possible_positions.append(new_pos)
             if board[new_pos][COLOR] != inverse_color(color):
                 print("Checker can be moved to position",
                       new_pos)
@@ -140,6 +143,7 @@ def check_move_possibility(dices, color):
                 print("Checker can't be moved to position ",
                       new_pos,
                       "because here is enemy's checker")
+    return possible_positions
 
 
 board = create_board()
