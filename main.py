@@ -150,8 +150,8 @@ board = create_board()
 init_board(board)
 print_board(board)
 
-print('checkers_pos: ', get_checkers_position(board, BLACK))
-print('checkers_pos: ', get_checkers_position(board, WHITE))
+# print('checkers_pos: ', get_checkers_position(board, BLACK))
+# print('checkers_pos: ', get_checkers_position(board, WHITE))
 
 players = []
 players.append(input_player_name('first'))
@@ -237,10 +237,10 @@ def check_checkers_in_house(board, color):
                 if index == 1:
                     sum_ += argument_of_cell
     if sum_ ==  CHECKERS_QTY:
-        print('all checkers are in house')
+        # print('all checkers are in house')
         return True
     else:
-        print('all checkers are not in house, the game continues')
+        # print('all checkers are not in house, the game continues')
         return False
 
 
