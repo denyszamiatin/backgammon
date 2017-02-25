@@ -155,7 +155,7 @@ players.append(input_second_player_name(players[0]))
 
 current_player = players[get_first_turn()]
 
-# print(current_player, " goes first")
+print(current_player, " goes first")
 #
 # change_player()
 
@@ -163,12 +163,10 @@ current_player = players[get_first_turn()]
 
 dice_res = roll_dices()
 
-def enter_the_number_of_field():
+def enter_the_number_of_field(current_player):
     possible_numbers = [i for i in range(1, BOARD_SIZE + 1)]
     number_of_field = 0
-    first_turn = players[get_first_turn()]
-    print('first_turn', first_turn)
-    if first_turn == players[0]:
+    if current_player == players[0]:
         check_move_possibility(dice_res, WHITE)
         while True:
             try:
@@ -223,7 +221,7 @@ def enter_the_number_of_dice(dices):
 
 
 field_and_number = []
-field_and_number = [enter_the_number_of_field(), enter_the_number_of_dice(dice_res)]
+field_and_number = [enter_the_number_of_field(current_player), enter_the_number_of_dice(dice_res)]
 print(field_and_number)
 
 
@@ -238,7 +236,7 @@ def check_checkers_in_house(board, color):
         print('all checkers are in house')
         return True
     else:
-        print('continue')
+        print('all checkers are not in house, the game continues')
         return False
 
 
