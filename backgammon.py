@@ -13,6 +13,7 @@ NOTHING = "  -  "
 num_white_out_of_the_board = 0
 num_black_out_of_the_board = 0
 
+
 def get_score():
     return random.randint(1, 6)
 
@@ -39,13 +40,12 @@ def get_first_turn():
 
 def get_num_white(a):
     try:
-        num = int (a[0::-1])
-        if(a[-1] == WHITE_CHECKER):
+        num = int(a[0::-1])
+        if a[-1] == WHITE_CHECKER:
             return num
-        else:
-            return 0
-    except:
-        return 0
+    except ValueError:
+        pass
+    return 0
 
 
 def get_num_black(a):
@@ -70,15 +70,17 @@ def assert_incorrect_board_state():
 
 def get_num_white_at_home():
     num = num_white_out_of_the_board
-    for i in range(0, QUARTER_BOARD, 1):
+    for i in range(QUARTER_BOARD):
         num += get_num_white(board[i])
     return num
 
 
 def can_move_white(score):
     all_white_at_home = get_num_white_at_home() == CHECKERS_QTY
-    for index in range(0, BOARD_SIZE, 1):
-        if get_num_white(board[index]) and index - score >= 0 and (get_num_black(board[index - score]) == 0):
+    for index in range(BOARD_SIZE):
+        if get_num_white(board[index]) and \
+                index - score >= 0 and \
+                (get_num_black(board[index - score]) == 0):
             return True
         if all_white_at_home and index - score < 0:
             return True
@@ -93,7 +95,6 @@ def invert_board_point (board_point):
 
 def can_move_from(move_from, score1, score2):
     # check only for white checkers
-    global board
     if score1 != NOT_A_SCORE:
         move_to = move_from - score1
         if move_to >= 0 and get_num_black(board[move_to]) == 0:
@@ -113,6 +114,19 @@ def can_move_from(move_from, score1, score2):
                 return True
     return False
 
+
+def get_point():
+    while True:
+        try:
+            return int(input("Move from field = ")) - 1
+        except ValueError:
+            print("FROM :: Please input a number!")
+
+
+def check_score(score_was_used, score):
+    return NOT_A_SCORE if score_was_used else score
+
+
 def move_white(score1, score2, board_is_inverted):
     # If board_is_inverted then we move black checkers
     print("scores:", score1, " ", score2)
@@ -122,18 +136,17 @@ def move_white(score1, score2, board_is_inverted):
     score1_was_used = False
     score2_was_used = False
     while ((not score1_was_used) and can_move_white(score1)) or ((not score2_was_used) and can_move_white(score2)):
-        move_from = int(input("Move from field = "))
-        try:
-            move_from = int(move_from)
-        except:
-            print("FROM :: Please input a number!")
-            continue
+        move_from = get_point()
 
-        move_from -= 1
         if board_is_inverted:
             move_from = invert_board_point(move_from)
-        if not can_move_from( move_from, NOT_A_SCORE if score1_was_used else score1, NOT_A_SCORE if score2_was_used else score2):
-            print ("You can not move from that point. Input point again.")
+
+        if not can_move_from(
+                move_from,
+                check_score(score1_was_used, score1),
+                check_score(score2_was_used, score2)
+        ):
+            print("You can not move from that point. Input point again.")
             continue
 
         if 0 <= move_from < BOARD_SIZE and get_num_white(board[move_from]) > 0:
